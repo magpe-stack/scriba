@@ -32,22 +32,8 @@
   padding: 0;
 }
 
-
-
-<style>
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
-}
-</style>
-
-
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-color);
   min-height: 100vh;
