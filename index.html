@@ -37,15 +37,30 @@
 
     <!-- Barra de Ferramentas -->
     <section class="toolbar">
+      <!-- Input invisível de arquivo para carregar o backup -->
+      <input type="file" id="fileImportInput" style="display: none;" accept=".json" onchange="importScribaBackup(event)">
+
+      <!-- Botões de Backup -->
+      <button onclick="exportScribaBackup()" class="btn btn-action" title="Salvar Backup do Scriba no PC">
+        💾 Salvar Backup
+      </button>
+
+      <button onclick="document.getElementById('fileImportInput').click()" class="btn btn-action" title="Carregar Backup do Scriba do PC">
+        📂 Carregar Backup
+      </button>
+
       <button id="copyCleanBtn" class="btn btn-action" title="Ctrl+Shift+C">
         📋 Copiar Texto Limpo
       </button>
+
       <button id="cleanFormattingBtn" class="btn btn-action">
         ✨ Limpar Formatação
       </button>
+
       <button id="highlightPhonesBtn" class="btn btn-action">
         📞 Destacar Telefones
       </button>
+
       <button id="clearBoardBtn" class="btn btn-danger" title="Atalho: Tecla Esc">
         🧹 Limpar Quadro
       </button>
