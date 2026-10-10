@@ -80,7 +80,7 @@ function switchTab(index) {
 // Renomear Aba
 function renameTab(index) {
   const currentName = appState.tabs[index].name;
-  const newName = prompt('Digite o novo nome para a aba:', currentName);
+  const newName = prompt('Digite o novo nome para o quadro:', currentName);
   if (newName && newName.trim() !== '') {
     appState.tabs[index].name = newName.trim();
     renderTabs();
@@ -145,7 +145,7 @@ highlightPhonesBtn.addEventListener('click', () => {
   if (matches && matches.length > 0) {
     pushHistory();
     const uniquePhones = [...new Set(matches.map(p => p.trim()))];
-    const phoneList = `\n\n--- 📞 LISTA DE TELEFONES DESTA CADA ---\n` + uniquePhones.join('\n');
+    const phoneList = `\n\n--- 📞 LISTA DE TELEFONES DESTE QUADRO ---\n` + uniquePhones.join('\n');
     
     editor.value = text + phoneList;
     appState.tabs[appState.activeTabIndex].content = editor.value;
@@ -211,6 +211,53 @@ if ('serviceWorker' in navigator) {
       console.log('Falha ao registrar ServiceWorker:', err);
     });
   });
+}
+
+// --- FUNÇÕES DE BACKUP LOCAL DOS QUADROS (SCRIBA) ---
+
+// Exportar/Baixar Backup de todos os quadros, nomes personalizados e notas
+function exportScribaBackup() {
+  try {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+    const downloadAnchor = document.createElement('a');
+    
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `Scriba_Backup_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+
+    showToast("Backup dos quadros salvo com sucesso!");
+  } catch (err) {
+    alert("⚠️ Erro ao gerar o backup dos quadros.");
+  }
+}
+
+// Importar/Restaurar Backup dos quadros e nomes do Scriba
+function importScribaBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      
+      // Valida se o arquivo possui a estrutura de abas/quadros do Scriba
+      if (importedData.tabs && Array.isArray(importedData.tabs)) {
+        appState = importedData;
+        saveState();
+        
+        alert('✅ Quadros do Scriba restaurados com sucesso! O aplicativo será recarregado.');
+        window.location.reload();
+      } else {
+        alert('⚠️ O arquivo selecionado não contém um backup válido do Scriba.');
+      }
+    } catch (err) {
+      alert('⚠️ Ocorreu um erro ao ler o arquivo de backup.');
+    }
+  };
+  reader.readAsText(file);
 }
 
 // Inicialização
